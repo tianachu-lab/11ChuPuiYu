@@ -113,18 +113,6 @@
       color: #111111;
     }
 
-    .btn-remove {
-      border-radius: 0;
-      background-color: #FEE2E2;
-      color: #B91C1C;
-      padding: 8px 12px;
-      font-size: 0.9rem;
-    }
-
-    .btn-remove:hover {
-      background-color: #FECACA;
-    }
-
     /* 新增欄外的淺灰色長方形卡片容器（直角） */
     .add-card {
       background-color: #F5F5F5;
@@ -217,15 +205,7 @@
       }
 
       .cart-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
         padding: 14px 16px;
-      }
-
-      .qty-controls {
-        width: 100%;
-        justify-content: space-between;
       }
 
       .add-card {
@@ -344,13 +324,7 @@
         plusBtn.setAttribute("aria-label", `增加 ${item.name} 數量`);
         plusBtn.addEventListener("click", () => updateQuantity(item.id, 1));
 
-        const removeBtn = document.createElement("button");
-        removeBtn.type = "button";
-        removeBtn.className = "btn btn-remove";
-        removeBtn.textContent = "移除";
-        removeBtn.addEventListener("click", () => removeItem(item.id));
-
-        controlsDiv.append(minusBtn, qtySpan, plusBtn, removeBtn);
+        controlsDiv.append(minusBtn, qtySpan, plusBtn);
         li.append(nameSpan, controlsDiv);
         cartList.appendChild(li);
       });
@@ -395,11 +369,6 @@
       } else {
         target.quantity = nextQty;
       }
-      renderCart();
-    }
-
-    function removeItem(id) {
-      cartItems = cartItems.filter((item) => item.id !== id);
       renderCart();
     }
 
