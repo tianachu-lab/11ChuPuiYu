@@ -13,8 +13,8 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
-      background-color: #f4f6f9;
-      color: #1f2937;
+      background-color: #FFFFFF;
+      color: #111111;
       padding: 24px;
       line-height: 1.5;
     }
@@ -23,44 +23,50 @@
       width: 100%;
       max-width: 960px;
       margin: 0 auto;
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 28px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      background-color: #FFFFFF;
     }
 
     h1 {
       font-size: 1.75rem;
-      margin-bottom: 20px;
-      color: #111827;
+      font-weight: bold;
+      margin-bottom: 24px;
+      color: #111111;
     }
 
-    /* 購物車清單 */
+    /* 購物車清單：卡片之間垂直間距 18px */
     .cart-list {
       list-style: none;
-      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
       margin-bottom: 24px;
     }
 
     .cart-empty {
+      background-color: #F5F5F5;
+      border-radius: 8px;
       padding: 32px 16px;
       text-align: center;
-      color: #6b7280;
-      border-bottom: 1px solid #e5e7eb;
+      color: #111111;
+      font-weight: bold;
     }
 
+    /* 獨立淺灰色長方形卡片容器 */
     .cart-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 16px 8px;
-      border-bottom: 1px solid #e5e7eb;
+      background-color: #F5F5F5;
+      border-radius: 8px;
+      padding: 16px 20px;
     }
 
+    /* 卡片內部商品名稱：深黑色粗體 */
     .item-name {
       font-size: 1.05rem;
-      font-weight: 500;
+      font-weight: bold;
+      color: #111111;
       word-break: break-word;
       flex: 1;
     }
@@ -68,49 +74,55 @@
     .qty-controls {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .btn {
       border: none;
-      border-radius: 8px;
       cursor: pointer;
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: bold;
       transition: background-color 0.2s ease;
     }
 
+    /* - 和 + 按鈕：等寬等高的正方形 */
     .btn-qty {
       width: 36px;
       height: 36px;
-      background-color: #e2e8f0;
-      color: #0f172a;
+      padding: 0;
+      border-radius: 4px;
+      background-color: #E2E8F0;
+      color: #111111;
       font-size: 1.15rem;
+      font-weight: bold;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .btn-qty:hover {
-      background-color: #cbd5e1;
+      background-color: #CBD5E1;
     }
 
     .qty-value {
-      min-width: 32px;
+      min-width: 28px;
       text-align: center;
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #111111;
     }
 
     .btn-remove {
-      background-color: #fee2e2;
-      color: #b91c1c;
+      border-radius: 6px;
+      background-color: #FEE2E2;
+      color: #B91C1C;
       padding: 8px 12px;
       font-size: 0.9rem;
     }
 
     .btn-remove:hover {
-      background-color: #fecaca;
+      background-color: #FECACA;
     }
 
     /* 位於下方的輸入文字框與新增按鈕 */
@@ -124,25 +136,28 @@
       flex: 1;
       padding: 12px 14px;
       font-size: 1rem;
-      border: 1px solid #cbd5e1;
+      color: #111111;
+      background-color: #FFFFFF;
+      border: 1px solid #CBD5E1;
       border-radius: 8px;
       outline: none;
     }
 
     .add-form input[type="text"]:focus {
-      border-color: #2563eb;
+      border-color: #2563EB;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
     .btn-add {
-      background-color: #2563eb;
-      color: #ffffff;
+      border-radius: 8px;
+      background-color: #2563EB;
+      color: #FFFFFF;
       padding: 12px 24px;
       white-space: nowrap;
     }
 
     .btn-add:hover {
-      background-color: #1d4ed8;
+      background-color: #1D4ED8;
     }
 
     /* 遞交區 */
@@ -153,47 +168,44 @@
 
     .btn-submit {
       width: 100%;
-      background-color: #16a34a;
-      color: #ffffff;
+      border-radius: 8px;
+      background-color: #16A34A;
+      color: #FFFFFF;
       padding: 12px 24px;
     }
 
     .btn-submit:hover {
-      background-color: #15803d;
+      background-color: #15803D;
     }
 
     .btn-submit:disabled {
-      background-color: #9ca3af;
+      background-color: #9CA3AF;
       cursor: not-allowed;
     }
 
     .status-msg {
       margin-top: 14px;
       font-size: 0.95rem;
-      color: #374151;
+      color: #111111;
       word-break: break-all;
     }
 
     /* 手機版適配（360x640 等小螢幕） */
     @media (max-width: 600px) {
       body {
-        padding: 12px;
-      }
-
-      .container {
-        padding: 16px;
-        border-radius: 10px;
+        padding: 16px 12px;
       }
 
       h1 {
         font-size: 1.35rem;
+        margin-bottom: 18px;
       }
 
       .cart-item {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
-        padding: 12px 4px;
+        gap: 12px;
+        padding: 14px 16px;
       }
 
       .qty-controls {
