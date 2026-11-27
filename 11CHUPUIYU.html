@@ -114,7 +114,7 @@
     }
 
     .btn-remove {
-      border-radius: 6px;
+      border-radius: 0;
       background-color: #FEE2E2;
       color: #B91C1C;
       padding: 8px 12px;
@@ -133,25 +133,30 @@
       margin-bottom: 18px;
     }
 
+    /* 輸入框在左，新增按鈕在最右側 */
     .add-form {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
     }
 
+    /* 僅文字框保留圓弧，縮短長度，框內與框邊皆為白色 */
     .add-form input[type="text"] {
-      flex: 1;
+      width: 100%;
+      max-width: 360px;
       padding: 12px 14px;
       font-size: 1rem;
       color: #111111;
       background-color: #FFFFFF;
-      border: 1px solid #CBD5E1;
-      border-radius: 0;
+      border: 1px solid #FFFFFF;
+      border-radius: 8px;
       outline: none;
     }
 
     .add-form input[type="text"]:focus {
-      border-color: #2563EB;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      border-color: #FFFFFF;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
     }
 
     .btn-add {
@@ -160,16 +165,20 @@
       color: #FFFFFF;
       padding: 12px 24px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .btn-add:hover {
       background-color: #1D4ED8;
     }
 
-    /* 遞交區 */
+    /* 遞交區與底部灰色區塊 */
     .cart-footer {
       display: flex;
       justify-content: flex-end;
+      background-color: #F5F5F5;
+      border-radius: 0;
+      padding: 16px 20px;
     }
 
     .btn-submit {
@@ -225,11 +234,20 @@
 
       .add-form {
         flex-direction: column;
+        align-items: stretch;
         gap: 10px;
+      }
+
+      .add-form input[type="text"] {
+        max-width: 100%;
       }
 
       .btn-add {
         width: 100%;
+      }
+
+      .cart-footer {
+        padding: 14px 16px;
       }
     }
   </style>
@@ -241,7 +259,7 @@
     <!-- 已加入購物車的商品列表 -->
     <ul id="cartList" class="cart-list"></ul>
 
-    <!-- 位於下方的淺灰色卡片容器（內含空白輸入框與「新增」按鈕） -->
+    <!-- 位於下方的淺灰色卡片容器（左側純白圓弧輸入框，最右側直角「新增」按鈕） -->
     <div class="add-card">
       <form id="addItemForm" class="add-form">
         <input
