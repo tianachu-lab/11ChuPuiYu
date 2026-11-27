@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>購物車頁面 - 11ChuPuiYu</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background-color: #f4f6f9;
+      color: #1f2937;
+      padding: 24px;
+      line-height: 1.5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 20px;
+      color: #111827;
+    }
+
+    /* 購物車清單 */
+    .cart-list {
+      list-style: none;
+      border-top: 1px solid #e5e7eb;
+      margin-bottom: 24px;
+    }
+
+    .cart-empty {
+      padding: 32px 16px;
+      text-align: center;
+      color: #6b7280;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .item-name {
+      font-size: 1.05rem;
+      font-weight: 500;
+      word-break: break-word;
+      flex: 1;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-qty {
+      width: 36px;
+      height: 36px;
+      background-color: #e2e8f0;
+      color: #0f172a;
+      font-size: 1.15rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-qty:hover {
+      background-color: #cbd5e1;
+    }
+
+    .qty-value {
+      min-width: 32px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .btn-remove {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    .btn-remove:hover {
+      background-color: #fecaca;
+    }
+
+    /* 位於下方的輸入文字框與新增按鈕 */
+    .add-form {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .add-form input[type="text"] {
+      flex: 1;
+      padding: 12px 14px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .add-form input[type="text"]:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .btn-add {
+      background-color: #2563eb;
+      color: #ffffff;
+      padding: 12px 24px;
+      white-space: nowrap;
+    }
+
+    .btn-add:hover {
+      background-color: #1d4ed8;
+    }
+
+    /* 遞交區 */
+    .cart-footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: #16a34a;
+      color: #ffffff;
+      padding: 12px 24px;
+    }
+
+    .btn-submit:hover {
+      background-color: #15803d;
+    }
+
+    .btn-submit:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .status-msg {
+      margin-top: 14px;
+      font-size: 0.95rem;
+      color: #374151;
+      word-break: break-all;
+    }
+
+    /* 手機版適配（360x640 等小螢幕） */
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      .container {
+        padding: 16px;
+        border-radius: 10px;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+      }
+
+      .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 4px;
+      }
+
+      .qty-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .add-form {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn-add {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>購物車頁面</h1>
+
+    <!-- 已加入購物車的商品列表 -->
+    <ul id="cartList" class="cart-list"></ul>
+
+    <!-- 位於下方的輸入文字框（空白）與「新增」按鈕 -->
+    <form id="addItemForm" class="add-form">
+      <input
+        type="text"
+        id="productNameInput"
+        aria-label="商品名稱"
+        autocomplete="off"
+        required
+      />
+      <button type="submit" class="btn btn-add">新增</button>
+    </form>
+
+    <!-- 遞交表單：以 HTTP POST 傳送至 http://example.com/cart -->
+    <form id="checkoutForm" action="http://example.com/cart" method="POST">
+      <input type="hidden" id="cartPayloadInput" name="cart" value="[]" />
+      <div class="cart-footer">
+        <button type="submit" id="submitBtn" class="btn btn-submit">
+          遞交購物車
+        </button>
+      </div>
+    </form>
+
+    <p id="statusMessage" class="status-msg"></p>
+  </main>
+
+  <script>
+    const TARGET_URL = "http://example.com/cart";
+
+    // 一打開頁面預設在購物車內的四樣商品
+    let cartItems = [
+      { id: "default-1", name: "牛肉", quantity: 1 },
+      { id: "default-2", name: "豬肉", quantity: 1 },
+      { id: "default-3", name: "生菜", quantity: 1 },
+      { id: "default-4", name: "雞蛋", quantity: 1 },
+    ];
+
+    const addItemForm = document.getElementById("addItemForm");
+    const productNameInput = document.getElementById("productNameInput");
+    const cartList = document.getElementById("cartList");
+    const checkoutForm = document.getElementById("checkoutForm");
+    const cartPayloadInput = document.getElementById("cartPayloadInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusMessage = document.getElementById("statusMessage");
+
+    function renderCart() {
+      cartList.innerHTML = "";
+
+      if (cartItems.length === 0) {
+        cartList.innerHTML = '<li class="cart-empty">購物車目前沒有商品</li>';
+        submitBtn.disabled = true;
+        cartPayloadInput.value = "[]";
+        return;
+      }
+
+      cartItems.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "cart-item";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "item-name";
+        nameSpan.textContent = item.name;
+
+        const controlsDiv = document.createElement("div");
+        controlsDiv.className = "qty-controls";
+
+        const minusBtn = document.createElement("button");
+        minusBtn.type = "button";
+        minusBtn.className = "btn btn-qty";
+        minusBtn.textContent = "-";
+        minusBtn.setAttribute("aria-label", `減少 ${item.name} 數量`);
+        minusBtn.addEventListener("click", () => updateQuantity(item.id, -1));
+
+        const qtySpan = document.createElement("span");
+        qtySpan.className = "qty-value";
+        qtySpan.textContent = String(item.quantity);
+
+        const plusBtn = document.createElement("button");
+        plusBtn.type = "button";
+        plusBtn.className = "btn btn-qty";
+        plusBtn.textContent = "+";
+        plusBtn.setAttribute("aria-label", `增加 ${item.name} 數量`);
+        plusBtn.addEventListener("click", () => updateQuantity(item.id, 1));
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "btn btn-remove";
+        removeBtn.textContent = "移除";
+        removeBtn.addEventListener("click", () => removeItem(item.id));
+
+        controlsDiv.append(minusBtn, qtySpan, plusBtn, removeBtn);
+        li.append(nameSpan, controlsDiv);
+        cartList.appendChild(li);
+      });
+
+      submitBtn.disabled = false;
+
+      // 整理要遞交的商品與數量資料
+      const payloadData = cartItems.map(({ name, quantity }) => ({
+        name,
+        quantity,
+      }));
+      cartPayloadInput.value = JSON.stringify(payloadData);
+    }
+
+    function addItem(name) {
+      const trimmed = name.trim();
+      if (!trimmed) return;
+
+      // 若已存在相同商品名稱，直接數量 +1
+      const existing = cartItems.find(
+        (item) => item.name.toLowerCase() === trimmed.toLowerCase()
+      );
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cartItems.push({
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          name: trimmed,
+          quantity: 1,
+        });
+      }
+      renderCart();
+    }
+
+    function updateQuantity(id, delta) {
+      const target = cartItems.find((item) => item.id === id);
+      if (!target) return;
+
+      const nextQty = target.quantity + delta;
+      if (nextQty <= 0) {
+        cartItems = cartItems.filter((item) => item.id !== id);
+      } else {
+        target.quantity = nextQty;
+      }
+      renderCart();
+    }
+
+    function removeItem(id) {
+      cartItems = cartItems.filter((item) => item.id !== id);
+      renderCart();
+    }
+
+    addItemForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      addItem(productNameInput.value);
+      productNameInput.value = "";
+      productNameInput.focus();
+    });
+
+    checkoutForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (cartItems.length === 0) return;
+
+      const payload = {
+        items: cartItems.map(({ name, quantity }) => ({ name, quantity })),
+      };
+
+      statusMessage.textContent = `正在以 HTTP POST 遞交至 ${TARGET_URL}...`;
+
+      try {
+        await fetch(TARGET_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        statusMessage.textContent = `已發送 HTTP POST 請求至 ${TARGET_URL}，內容：${JSON.stringify(payload)}`;
+      } catch (err) {
+        cartPayloadInput.value = JSON.stringify(payload.items);
+        statusMessage.textContent = `已準備遞交至 ${TARGET_URL}，內容：${JSON.stringify(payload)}`;
+        checkoutForm.submit();
+      }
+    });
+
+    renderCart();
+  </script>
+</body>
+</html>
